@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hangman</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script type="text/javascript" src="assets/javascript/game.js"></script>
+</head>
+<body>
+       <p>Welcome to hangman game!</p>
+       <p>Press anykey to start.</p>
+       <div id="word"></div>
+       <div id="goodLuck"></div>
+       <div id="detail"></div>
+       <div id="win"></div>
+   </div>
+
+</body>
+<script type="text/javascript">
+   var listWords = ["hello", "worlds"];
+   // choose a word from listWords randomly
+   var answer;
+
+   // find string length of the answer
+   var n ;
+
+   // draw n dashes
+   var dash;
+
+   // record right and wrong guessing
+   var correct = 0;
+   var wrong = 0;
+
+   var start=false;
+
+   // player guess a letter
+   document.onkeyup = function(event) {
+       var guessKey = event.key;
+       if(start === false){
+         start=true;
+
+         answer = listWords[Math.floor(Math.random() * listWords.length)];
+         n = answer.length;
+         dash = (Array(n + 1).join("-"));
+         correct = 0;
+         wrong=0;
+
+         document.querySelector("#word").innerHTML = "<p>" + dash + "</p>";
+         document.querySelector("#goodLuck").innerHTML = "<p>The word has " + n + " letters. Good luck!</p>";
+         document.querySelector("#win").innerHTML ="";
+         return;
+       }
+
+       // limit guessKey to alphabetic letters
+       var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+       if (alphabet.includes(guessKey)) {
+           for (var i = 0; i < n; i++) {
+               if (guessKey == answer.charAt(i) && dash.charAt(i) ==="-") {
+                   // put the correct letter to its corresponding place in dashes
+                   console.log(dash = dash.substr(0, i) + answer.charAt(i) + dash.substr(i + 1));
+                   console.log("correct guess: " + guessKey);
+                   correct++;
+                   for(var j=i+1;j<n;j++){
+                     if(guessKey === answer.charAt(j)){
+                       dash = dash.substr(0, j) + answer.charAt(j) + dash.substr(j + 1);
+                       correct++;
+                     }
+                   }
+
+                   document.querySelector("#word").innerHTML = "<p>" + dash + "</p>";
+                   document.querySelector("#detail").innerHTML = "<p>correct: " + correct + "</p><p>wrong: " + wrong + "</p>";
